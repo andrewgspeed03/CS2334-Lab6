@@ -28,8 +28,14 @@ public class IntegerList {
 	 * @param capacity  the initial length of the internal array
 	 * @throws IllegalArgumentException  if capacity is less than MIN_CAPACITY
 	 */
-	public IntegerList(int capacity) {
+	public IntegerList(int capacity) throws IllegalArgumentException{
 		// TODO: Implement this method.
+		if(capacity < MIN_CAPACITY)
+			throw new IllegalArgumentException("The capacity cannot be less than 2.");
+		else {
+			array = new int[capacity];
+			size = 0;
+		}
 	}
 	
 	/**
@@ -38,7 +44,11 @@ public class IntegerList {
 	 * @param integer  the integer to be appended
 	 */
 	public void add(int integer) {
-		insert(size, integer);
+		if (size == array.length) {
+			array = Arrays.copyOf(array, 2*array.length);
+		}
+		array[size] = integer;
+		size++;
 	}
 	
 	/**
@@ -50,6 +60,11 @@ public class IntegerList {
 	 */
 	public int indexOf(int integer) {
 		// TODO: Implement this method.
+		for(int i = 0; i < size; i++)  
+			if(array[i] == integer) 
+				return i;
+		return -1;
+		
 	}
 	
 	/**
@@ -60,8 +75,12 @@ public class IntegerList {
 	 * @throws IndexOutOfBoundsException  if index is negative or greater than 
 	 *                                    or equal to size
 	 */
-	public int get(int index) {
+	public int get(int index) throws IndexOutOfBoundsException{
 		// TODO: Implement this method.
+		if(index < 0 || index >= size)
+			throw new IndexOutOfBoundsException("The index is outside the range [0, " + (size-1) + "].");
+		else
+			return array[index];
 	}
 	
 	/**
@@ -151,5 +170,9 @@ public class IntegerList {
 	public String toString() {
 		StringJoiner joiner = new StringJoiner(", ", "[", "]");
 		// TODO: Complete this method.
+		for(int x = 0; x < size; x++)
+			joiner.add(get(x)+"");
+		String rtn = joiner.toString();
+		return rtn;
 	}
 }
